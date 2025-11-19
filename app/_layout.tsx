@@ -1,23 +1,21 @@
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import merge from "deepmerge";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import React from "react";
 import { useColorScheme } from "react-native";
-import { Colors } from "../constants/colors";
-
 import {
   MD3DarkTheme,
   MD3LightTheme,
   PaperProvider,
   adaptNavigationTheme,
 } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Colors } from "../constants/colors";
 
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import React from "react";
-
-// 👇 Aquí se sobreescribe correctamente "colors" en vez de "Colors"
 const customDarkTheme = {
   ...MD3DarkTheme,
   colors: {
@@ -34,13 +32,11 @@ const customLightTheme = {
   },
 };
 
-// Adaptamos la navegación a los temas
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
   reactNavigationDark: NavigationDarkTheme,
 });
 
-// Combinamos navegación y paper
 const CombinedDefaultTheme = merge(LightTheme, customLightTheme);
 const CombinedDarkTheme = merge(DarkTheme, customDarkTheme);
 
@@ -53,15 +49,9 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={paperTheme}>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              title: "NotifIA",
-              headerShown: false,
-            }}
-          />
-        </Stack>
+        <SafeAreaProvider>
+          <Slot />
+        </SafeAreaProvider>
       </ThemeProvider>
     </PaperProvider>
   );

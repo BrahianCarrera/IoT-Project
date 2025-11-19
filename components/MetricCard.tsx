@@ -7,7 +7,7 @@ interface MetricCardProps {
   title: string;
   value: number;
   unit: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
   min: number;
   max: number;
   status: "optimal" | "warning" | "critical";
