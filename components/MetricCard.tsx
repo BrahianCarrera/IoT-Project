@@ -41,8 +41,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 
   return (
     <Card
-      style={[styles.metricCard, { backgroundColor: theme.colors.surface }]}
-      elevation={2}
+      style={[styles.metricCard, { backgroundColor: theme.colors.elevation.level2, elevation: 2 }]}
     >
       <Card.Content style={styles.metricContent}>
         <View style={styles.metricHeader}>

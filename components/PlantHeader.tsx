@@ -45,7 +45,7 @@ const PlantHeader: React.FC<PlantHeaderProps> = ({ isConnected, lastUpdate }) =>
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 20,

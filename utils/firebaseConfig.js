@@ -1,11 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
+import { APIKEY, DATABASEURL, authDomain } from '../.env';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAMBLi6pqFIEx6uOP4wRgfZtVtM49DxDek",
-  authDomain: "cultivo-hidro.firebaseapp.com",
-  databaseURL: "https://cultivo-hidro-default-rtdb.firebaseio.com",
+  apiKey: APIKEY,
+  authDomain: authDomain,
+  databaseURL: DATABASEURL,
   projectId: "cultivo-hidro",
   storageBucket: "cultivo-hidro.firebasestorage.app",
   messagingSenderId: "155817802439",

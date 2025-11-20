@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   statusCard: {
     margin: 16,
     borderRadius: 16,
-    paddingHorizontal: 8, // Ajuste para el contenido
+    paddingHorizontal: 8, 
     paddingVertical: 4,
   },
   statusRow: {

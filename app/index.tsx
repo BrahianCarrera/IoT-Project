@@ -112,14 +112,14 @@ export default function Index() {
 
   // Si los datos están cargados y no hay error, muestra la interfaz normal
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
-        style={[styles.container, { backgroundColor: theme.colors.background }]}
-        contentContainerStyle={styles.contentContainer}
+        style={{ backgroundColor: theme.colors.background }}
+        contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {/* 5. Mapeo de Datos - Uso de métricas reales de Firebase */}
+        
         <PlantHeader
-          isConnected={!error} // Se considera conectado si no hay error
+          isConnected={!error} 
           lastUpdate={metrics.timestamp}
         />
 
@@ -131,10 +131,10 @@ export default function Index() {
         />
 
         <View style={styles.metricsGrid}>
-          {/* TEMPERATURA */}
+          
           <MetricCard
             title="Temperatura"
-            value={metrics.temperatura} // USAR `temperatura` de Firebase
+            value={metrics.temperatura} 
             unit="°C"
             icon="thermometer"
             min={18}
@@ -196,21 +196,12 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    paddingBottom: 20, // Espacio al final del scroll
-  },
+  
   metricsGrid: {
     flexDirection: "column",
     flexWrap: "nowrap",
     justifyContent: "flex-start",
     gap: 8,
-    paddingHorizontal: 8,
   },
   centerContainer: {
     flex: 1,

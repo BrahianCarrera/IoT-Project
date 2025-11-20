@@ -30,7 +30,7 @@ const WaterLevelCard: React.FC<WaterLevelCardProps> = ({ waterLevel, status }) =
     <Card 
       style={[
         styles.waterLevelCard,
-        { backgroundColor: theme.colors.surface }
+        { backgroundColor: theme.colors.elevation.level2 }
       ]}
       elevation={2}
     >

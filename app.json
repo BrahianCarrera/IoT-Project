@@ -10,16 +10,16 @@
     "newArchEnabled": true,
     "entryPoint": "./src/app/index.tsx",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chensoxo.iotProject"
     },
     "android": {
-      "package": "com.chenso.iotproject",
+      "package": "com.chensoxo.iotProject",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.chensoxo.iotProject"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
