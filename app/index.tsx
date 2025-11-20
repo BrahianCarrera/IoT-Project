@@ -8,6 +8,7 @@ import { usePlantMetrics } from "@/hooks/usePlantMetrics";
 import React from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const theme = useTheme();
@@ -40,76 +41,81 @@ export default function Index() {
   };
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.colors.background }]}
     >
-      <PlantHeader isConnected={isConnected} />
+      <ScrollView style={styles.container}>
+        <PlantHeader isConnected={isConnected} />
 
-      <StatusCard
-        isWatering={isWatering}
-        lastWatering={metrics.lastWatering}
-        lightLevel={metrics.lightLevel}
-      />
-
-      <View style={styles.metricsGrid}>
-        <MetricCard
-          title="Temperatura"
-          value={metrics.temperature}
-          unit="°C"
-          icon="thermometer"
-          min={18}
-          max={30}
-          status={getMetricStatus(metrics.temperature, 18, 30)}
+        <StatusCard
+          isWatering={isWatering}
+          lastWatering={metrics.lastWatering}
+          lightLevel={metrics.lightLevel}
         />
 
-        <MetricCard
-          title="Humedad"
-          value={metrics.humidity}
-          unit="%"
-          icon="water-percent"
-          min={40}
-          max={80}
-          status={getMetricStatus(metrics.humidity, 40, 80)}
+        <View style={styles.metricsGrid}>
+          <MetricCard
+            title="Temperatura"
+            value={metrics.temperature}
+            unit="°C"
+            icon="thermometer"
+            min={18}
+            max={30}
+            status={getMetricStatus(metrics.temperature, 18, 30)}
+          />
+
+          <MetricCard
+            title="Humedad"
+            value={metrics.humidity}
+            unit="%"
+            icon="water-percent"
+            min={40}
+            max={80}
+            status={getMetricStatus(metrics.humidity, 40, 80)}
+          />
+
+          <MetricCard
+            title="pH"
+            value={metrics.ph}
+            unit=""
+            icon="ph"
+            min={5.5}
+            max={7.0}
+            status={getMetricStatus(metrics.ph, 5.5, 7.0)}
+          />
+
+          <MetricCard
+            title="Conductividad"
+            value={metrics.ec}
+            unit="mS/cm"
+            icon="flash"
+            min={1.0}
+            max={3.0}
+            status={getMetricStatus(metrics.ec, 1.0, 3.0)}
+          />
+        </View>
+
+        <WaterLevelCard
+          waterLevel={metrics.waterLevel}
+          status={getMetricStatus(metrics.waterLevel, 20, 100)}
         />
 
-        <MetricCard
-          title="pH"
-          value={metrics.ph}
-          unit=""
-          icon="ph"
-          min={5.5}
-          max={7.0}
-          status={getMetricStatus(metrics.ph, 5.5, 7.0)}
+        <ActionButtons
+          isWatering={isWatering}
+          onWatering={handleWateringWithAlert}
+          onRefresh={handleRefresh}
         />
 
-        <MetricCard
-          title="Conductividad"
-          value={metrics.ec}
-          unit="mS/cm"
-          icon="flash"
-          min={1.0}
-          max={3.0}
-          status={getMetricStatus(metrics.ec, 1.0, 3.0)}
-        />
-      </View>
-
-      <WaterLevelCard
-        waterLevel={metrics.waterLevel}
-        status={getMetricStatus(metrics.waterLevel, 20, 100)}
-      />
-
-      <ActionButtons
-        isWatering={isWatering}
-        onWatering={handleWateringWithAlert}
-        onRefresh={handleRefresh}
-      />
-
-      <PlantFooter />
-    </ScrollView>
+        <PlantFooter />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },

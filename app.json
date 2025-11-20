@@ -8,10 +8,12 @@
     "scheme": "iotproject",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "entryPoint": "./src/app/index.tsx",
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.chenso.iotproject",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
