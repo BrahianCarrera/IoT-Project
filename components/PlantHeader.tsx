@@ -4,9 +4,10 @@ import { Chip, Text, useTheme } from "react-native-paper";
 
 interface PlantHeaderProps {
   isConnected: boolean;
+  lastUpdate: String;
 }
 
-const PlantHeader: React.FC<PlantHeaderProps> = ({ isConnected }) => {
+const PlantHeader: React.FC<PlantHeaderProps> = ({ isConnected, lastUpdate }) => {
   const theme = useTheme();
 
   return (
@@ -35,6 +36,9 @@ const PlantHeader: React.FC<PlantHeaderProps> = ({ isConnected }) => {
       >
         {isConnected ? "Conectado" : "Desconectado"}
       </Chip>
+      <Text>
+        Ultima Conexion : {lastUpdate}
+      </Text>
     </View>
   );
 };

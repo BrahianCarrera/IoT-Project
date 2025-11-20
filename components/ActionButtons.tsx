@@ -1,49 +1,56 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, useTheme } from "react-native-paper";
+import { ActivityIndicator, Button, useTheme } from "react-native-paper";
 
 interface ActionButtonsProps {
-  isWatering: boolean;
-  onWatering: () => void;
-  onRefresh: () => void;
+  isControlling: boolean;        
+  bombaActive: boolean;          
+  onToggleBomba: () => void;     
+  onRefresh: () => void;         
 }
 
-const ActionButtons: React.FC<ActionButtonsProps> = ({ 
-  isWatering, 
-  onWatering, 
-  onRefresh 
+const ActionButtons: React.FC<ActionButtonsProps> = ({
+  isControlling,
+  bombaActive,
+  onToggleBomba,
+  onRefresh,
 }) => {
   const theme = useTheme();
 
   return (
     <View style={styles.actionButtons}>
+      {/* BOTÓN CONTROL DE BOMBA */}
       <Button
         mode="contained"
-        icon="water"
-        onPress={onWatering}
-        disabled={isWatering}
+        onPress={onToggleBomba}
+        disabled={isControlling}
+        icon={bombaActive ? "power" : "power-off"}
         style={[
           styles.waterButton,
-          { 
-            backgroundColor: isWatering 
-              ? theme.colors.surfaceDisabled 
-              : theme.colors.primary 
-          }
+          {
+            backgroundColor: bombaActive
+              ? theme.colors.error          
+              : theme.colors.primary,      
+          },
         ]}
         contentStyle={styles.buttonContent}
         labelStyle={{ color: theme.colors.onPrimary }}
       >
-        {isWatering ? "Regando..." : "💧 Regar Planta"}
+        {isControlling ? (
+          <ActivityIndicator color={theme.colors.onPrimary} />
+        ) : bombaActive ? (
+          "Apagar Bomba"
+        ) : (
+          "Encender Bomba"
+        )}
       </Button>
 
+     
       <Button
         mode="outlined"
         icon="refresh"
         onPress={onRefresh}
-        style={[
-          styles.refreshButton,
-          { borderColor: theme.colors.primary }
-        ]}
+        style={[styles.refreshButton, { borderColor: theme.colors.primary }]}
         contentStyle={styles.buttonContent}
         labelStyle={{ color: theme.colors.primary }}
       >

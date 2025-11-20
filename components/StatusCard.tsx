@@ -4,17 +4,25 @@ import { StyleSheet, View } from "react-native";
 import { Card, Surface, Text, useTheme } from "react-native-paper";
 
 interface StatusCardProps {
-  isWatering: boolean;
-  lastWatering: string;
-  lightLevel: number;
+  isBombaActive: boolean;
+  isValvulaActive: boolean;
+  isWatering: boolean; 
+  lastWatering: string; 
+  
 }
 
 const StatusCard: React.FC<StatusCardProps> = ({ 
+  isBombaActive,
+  isValvulaActive,
   isWatering, 
   lastWatering, 
-  lightLevel 
+  
 }) => {
   const theme = useTheme();
+  
+  // Color primario para el estado ACTIVO, color de fondo para inactivo
+  const activeColor = theme.colors.primary;
+  const inactiveColor = theme.colors.onSurfaceVariant;
 
   return (
     <Surface 
@@ -25,37 +33,57 @@ const StatusCard: React.FC<StatusCardProps> = ({
       elevation={2}
     >
       <Card.Content>
+        
+        <View style={styles.statusRow}>
+          <MaterialCommunityIcons
+            name="pump" 
+            size={20}
+            color={isBombaActive ? activeColor : inactiveColor}
+          />
+          <Text 
+            variant="bodyMedium"
+            style={[
+              styles.statusText,
+              { color: isBombaActive ? activeColor : inactiveColor, fontWeight: isBombaActive ? 'bold' : 'normal' }
+            ]}
+          >
+            Bomba: {isBombaActive ? "**ENCENDIDA**" : "Apagada"}
+          </Text>
+        </View>
+
+        
+        <View style={styles.statusRow}>
+          <MaterialCommunityIcons
+            name="pipe-valve" // Icono de válvula
+            size={20}
+            color={isValvulaActive ? activeColor : inactiveColor}
+          />
+          <Text 
+            variant="bodyMedium"
+            style={[
+              styles.statusText,
+              { color: isValvulaActive ? activeColor : inactiveColor, fontWeight: isValvulaActive ? 'bold' : 'normal' }
+            ]}
+          >
+            Válvula Principal: {isValvulaActive ? "**ABIERTA**" : "Cerrada"}
+          </Text>
+        </View>
+
+      
         <View style={styles.statusRow}>
           <MaterialCommunityIcons
             name="water"
             size={20}
-            color={isWatering ? theme.colors.primary : theme.colors.onSurfaceVariant}
+            color={isWatering ? activeColor : inactiveColor}
           />
           <Text 
             variant="bodyMedium"
             style={[
               styles.statusText,
-              { color: theme.colors.onSurfaceVariant }
+              { color: inactiveColor }
             ]}
           >
-            {isWatering ? "Regando..." : `Último riego: ${lastWatering}`}
-          </Text>
-        </View>
-        
-        <View style={styles.statusRow}>
-          <MaterialCommunityIcons
-            name="lightbulb-on"
-            size={20}
-            color={lightLevel > 50 ? theme.colors.tertiary : theme.colors.onSurfaceVariant}
-          />
-          <Text 
-            variant="bodyMedium"
-            style={[
-              styles.statusText,
-              { color: theme.colors.onSurfaceVariant }
-            ]}
-          >
-            Luz: {lightLevel.toFixed(0)}%
+            {isWatering ? "Regando..." : `Último riego (DB Timestamp): ${lastWatering}`}
           </Text>
         </View>
       </Card.Content>
@@ -67,6 +95,8 @@ const styles = StyleSheet.create({
   statusCard: {
     margin: 16,
     borderRadius: 16,
+    paddingHorizontal: 8, // Ajuste para el contenido
+    paddingVertical: 4,
   },
   statusRow: {
     flexDirection: "row",

@@ -4,79 +4,159 @@ import PlantFooter from "@/components/PlantFooter";
 import PlantHeader from "@/components/PlantHeader";
 import StatusCard from "@/components/StatusCard";
 import WaterLevelCard from "@/components/WaterLevelCard";
-import { usePlantMetrics } from "@/hooks/usePlantMetrics";
+import { useCultivoMetrics } from "@/hooks/useCultivoMetrics";
 import React from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const theme = useTheme();
-  const { metrics, isWatering, isConnected, getMetricStatus, handleWatering } =
-    usePlantMetrics();
 
+  // 2. Desestructuración de las variables del nuevo Hook de Firebase
+  const {
+    metrics,
+    isLoading,
+    error,
+    isControlling, // Reemplaza a isWatering para indicar que una operación de control está en curso
+    getMetricStatus,
+    handleToggleBomba, // Reemplaza a handleWatering
+  } = useCultivoMetrics();
+
+  // Función de actualización (opcional si usas onValue, pero se mantiene la alerta)
   const handleRefresh = () => {
     Alert.alert("Actualizando", "Sincronizando datos con los sensores...");
+    // Nota: Gracias al onValue del hook, los datos ya se actualizan en tiempo real.
+    // Esta función podría usarse para recargar datos históricos o forzar una actualización manual.
   };
 
-  const handleWateringWithAlert = () => {
+  // 3. Adaptación del control de riego (ahora es el control de la bomba)
+  const handleBombaControl = () => {
+    if (isControlling) return; // Deshabilita si ya hay una operación en curso
+
+    const action = metrics.bomba ? "Apagada" : "Encendida";
+
     Alert.alert(
-      "Riego Iniciado",
-      "El sistema de riego se ha activado. La planta será regada por 30 segundos.",
+      "Control de Bomba",
+      `¿Deseas cambiar el estado de la bomba a: ${action}?`,
       [
         {
-          text: "OK",
-          onPress: () => {
-            handleWatering();
-            setTimeout(() => {
-              Alert.alert(
-                "Riego Completado",
-                "La planta ha sido regada exitosamente."
-              );
-            }, 3000);
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Confirmar",
+          onPress: async () => {
+            // Llama a la nueva función de control de Firebase
+            await handleToggleBomba();
+
+            // Muestra una alerta de confirmación
+            Alert.alert(
+              "Operación en Curso",
+              `La bomba está siendo ${action}. El estado se actualizará en unos segundos.`,
+            );
           },
         },
-      ]
+      ],
     );
   };
 
+  // --- 4. Manejo de Estado de Carga y Error ---
+  if (isLoading) {
+    return (
+      <View
+        style={[
+          styles.centerContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ marginTop: 10, color: theme.colors.onSurface }}>
+          Cargando datos en tiempo real...
+        </Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View
+        style={[
+          styles.centerContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
+        <Text
+          style={{
+            color: theme.colors.error,
+            fontSize: 16,
+            fontWeight: "bold",
+          }}
+        >
+          ⚠️ Error de Conexión
+        </Text>
+        <Text style={{ color: theme.colors.onSurface }}>
+          No se pudo conectar con la base de datos.
+        </Text>
+        <Text style={{ color: theme.colors.onSurface }}>{error}</Text>
+      </View>
+    );
+  }
+
+  // Si los datos están cargados y no hay error, muestra la interfaz normal
   return (
-    <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: theme.colors.background }]}
-    >
-      <ScrollView style={styles.container}>
-        <PlantHeader isConnected={isConnected} />
+    <SafeAreaView>
+      <ScrollView
+        style={[styles.container, { backgroundColor: theme.colors.background }]}
+        contentContainerStyle={styles.contentContainer}
+      >
+        {/* 5. Mapeo de Datos - Uso de métricas reales de Firebase */}
+        <PlantHeader
+          isConnected={!error} // Se considera conectado si no hay error
+          lastUpdate={metrics.timestamp}
+        />
 
         <StatusCard
-          isWatering={isWatering}
-          lastWatering={metrics.lastWatering}
-          lightLevel={metrics.lightLevel}
+          isBombaActive={metrics.bomba}
+          isValvulaActive={metrics.valvula}
+          isWatering={metrics.regando}
+          lastWatering={metrics.timestamp}
         />
 
         <View style={styles.metricsGrid}>
+          {/* TEMPERATURA */}
           <MetricCard
             title="Temperatura"
-            value={metrics.temperature}
+            value={metrics.temperatura} // USAR `temperatura` de Firebase
             unit="°C"
             icon="thermometer"
             min={18}
             max={30}
-            status={getMetricStatus(metrics.temperature, 18, 30)}
+            status={getMetricStatus(metrics.temperatura, 18, 30)}
           />
 
+          {/* HUMEDAD DEL AIRE (Reemplaza la humedad genérica) */}
           <MetricCard
-            title="Humedad"
-            value={metrics.humidity}
+            title="Humedad del Aire"
+            value={metrics.humedad_aire} // USAR `humedad_aire` de Firebase
             unit="%"
             icon="water-percent"
             min={40}
             max={80}
-            status={getMetricStatus(metrics.humidity, 40, 80)}
+            status={getMetricStatus(metrics.humedad_aire, 40, 80)}
           />
 
+          {/* PH */}
           <MetricCard
             title="pH"
-            value={metrics.ph}
+            value={metrics.ph} // USAR `ph` de Firebase
             unit=""
             icon="ph"
             min={5.5}
@@ -84,25 +164,28 @@ export default function Index() {
             status={getMetricStatus(metrics.ph, 5.5, 7.0)}
           />
 
+          {/* CONDUCTIVIDAD (Si usas otro nombre como EC, ajústalo) */}
+          {/* Aquí usaremos la humedad del suelo como ejemplo, ya que EC no está en tu DB */}
           <MetricCard
-            title="Conductividad"
-            value={metrics.ec}
-            unit="mS/cm"
-            icon="flash"
-            min={1.0}
-            max={3.0}
-            status={getMetricStatus(metrics.ec, 1.0, 3.0)}
+            title="Humedad del Suelo"
+            value={metrics.humedad_suelo}
+            unit="%"
+            icon="earth"
+            min={20}
+            max={90}
+            status={getMetricStatus(metrics.humedad_suelo, 20, 90)}
           />
         </View>
 
         <WaterLevelCard
-          waterLevel={metrics.waterLevel}
-          status={getMetricStatus(metrics.waterLevel, 20, 100)}
+          waterLevel={metrics.nivel_agua} // USAR `nivel_agua` de Firebase
+          status={getMetricStatus(metrics.nivel_agua, 20, 100)}
         />
 
         <ActionButtons
-          isWatering={isWatering}
-          onWatering={handleWateringWithAlert}
+          isControlling={isControlling} // Muestra spinner si está controlando
+          bombaActive={metrics.bomba} // Pasa el estado actual de la bomba
+          onToggleBomba={handleBombaControl} // Usa la nueva función de control
           onRefresh={handleRefresh}
         />
 
@@ -119,10 +202,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  contentContainer: {
+    paddingBottom: 20, // Espacio al final del scroll
+  },
   metricsGrid: {
     flexDirection: "column",
     flexWrap: "nowrap",
     justifyContent: "flex-start",
     gap: 8,
+    paddingHorizontal: 8,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
