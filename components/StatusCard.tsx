@@ -6,7 +6,7 @@ import { Card, Surface, Text, useTheme } from "react-native-paper";
 interface StatusCardProps {
   isBombaActive: boolean;
   isValvulaActive: boolean;
-  isWatering: boolean; 
+
   lastWatering: string; 
   
 }
@@ -14,7 +14,6 @@ interface StatusCardProps {
 const StatusCard: React.FC<StatusCardProps> = ({ 
   isBombaActive,
   isValvulaActive,
-  isWatering, 
   lastWatering, 
   
 }) => {
@@ -47,14 +46,14 @@ const StatusCard: React.FC<StatusCardProps> = ({
               { color: isBombaActive ? activeColor : inactiveColor, fontWeight: isBombaActive ? 'bold' : 'normal' }
             ]}
           >
-            Bomba: {isBombaActive ? "**ENCENDIDA**" : "Apagada"}
+            Bomba: {isBombaActive ? "Encendida" : "Apagada"}
           </Text>
         </View>
 
         
         <View style={styles.statusRow}>
           <MaterialCommunityIcons
-            name="pipe-valve" // Icono de válvula
+            name="pipe-valve" 
             size={20}
             color={isValvulaActive ? activeColor : inactiveColor}
           />
@@ -65,17 +64,13 @@ const StatusCard: React.FC<StatusCardProps> = ({
               { color: isValvulaActive ? activeColor : inactiveColor, fontWeight: isValvulaActive ? 'bold' : 'normal' }
             ]}
           >
-            Válvula Principal: {isValvulaActive ? "**ABIERTA**" : "Cerrada"}
+            Válvula Principal: {isValvulaActive ? "Encendida" : "Apagada"}
           </Text>
         </View>
 
       
         <View style={styles.statusRow}>
-          <MaterialCommunityIcons
-            name="water"
-            size={20}
-            color={isWatering ? activeColor : inactiveColor}
-          />
+          
           <Text 
             variant="bodyMedium"
             style={[
@@ -83,7 +78,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
               { color: inactiveColor }
             ]}
           >
-            {isWatering ? "Regando..." : `Último riego (DB Timestamp): ${lastWatering}`}
+            {`Último riego: ${lastWatering}`}
           </Text>
         </View>
       </Card.Content>

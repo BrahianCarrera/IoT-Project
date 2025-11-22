@@ -12,15 +12,14 @@ const INITIAL_STATE: CultivoData = {
   ph: 0,
   temperatura: 0,
   timestamp: "",
-  valvula: false,
-  regando: false,
+
 };
 
 export const useCultivoMetrics = () => {
   // Usamos CultivoData para tipar el estado que viene de Firebase
   const [metrics, setMetrics] = useState<CultivoData>(INITIAL_STATE);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoadingMetrics, setIsLoadingMetrics] = useState(true);
+  const [errorMetrics, setErrorMetrics] = useState<string | null>(null);
 
   // No necesitamos isConnected si la DB está escuchando activamente
   // Mantenemos la lógica de control separada para la interfaz
@@ -28,42 +27,40 @@ export const useCultivoMetrics = () => {
 
   // --- LÓGICA DE LECTURA DE DATOS (Reemplaza el `setInterval`) ---
   useEffect(() => {
-    const dataRef = ref(database, 'cultivo/datos_actuales');
+    const dataRef = ref(database, 'cultivo/datos');
 
     const unsubscribe = onValue(dataRef, (snapshot) => {
       if (snapshot.exists()) {
         // Mapea los datos directamente a tu estado
         setMetrics(snapshot.val() as CultivoData);
-        setError(null);
+        setErrorMetrics(null);
       } else {
         // En caso de que el nodo esté vacío
         setMetrics(INITIAL_STATE);
       }
-      setIsLoading(false);
+      setIsLoadingMetrics(false);
     }, (dbError) => {
       // Manejo de errores de Firebase
       console.error("Firebase Read Error:", dbError);
-      setError("Fallo la conexión o lectura de la base de datos.");
-      setIsLoading(false);
+      setErrorMetrics("Fallo la conexión o lectura de la base de datos.");
+      setIsLoadingMetrics(false);
     });
 
     return () => unsubscribe();
-  }, []); // Se ejecuta solo al montar
+  }, []);
 
   // --- LÓGICA DE NEGOCIO (Mantenida de tu hook original) ---
 
   // Puedes dejar la función de estatus igual, solo adapta los nombres de los campos si es necesario
   const getMetricStatus = useCallback((value: number, min: number, max: number): MetricStatus => {
     if (value < min || value > max) return 'critical';
-    // Lógica para Warning...
+    else if (value < min + (max - min) * 0.2 || value > max - (max - min) * 0.2) return 'warning';
     return 'optimal';
   }, []);
 
-  // --- LÓGICA DE ESCRITURA DE CONTROL (Nueva) ---
 
-  // Función para encender/apagar la bomba y actualizar la DB
   const handleToggleBomba = async () => {
-    if (isControlling) return; // Evita doble click
+    if (isControlling) return;
 
     setIsControlling(true);
 
@@ -86,8 +83,8 @@ export const useCultivoMetrics = () => {
 
   return {
     metrics,
-    isLoading,
-    error,
+    isLoadingMetrics,
+    errorMetrics,
     isControlling,
     getMetricStatus,
     handleToggleBomba,

@@ -63,7 +63,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
         </Text>
 
         <ProgressBar
-          progress={(value - min) / (max - min)}
+          progress={value < min || value > max ? 0 : (value - min) / (max - min)}
           color={statusColor}
           style={styles.progressBar}
         />

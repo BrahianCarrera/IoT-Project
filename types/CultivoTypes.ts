@@ -6,8 +6,6 @@ export interface CultivoData {
     ph: number;
     temperatura: number;
     timestamp: string; // Fecha u hora del último registro
-    valvula: boolean;
-    regando: boolean;
 }
 
 export type MetricStatus = 'optimal' | 'warning' | 'critical';
