@@ -10,7 +10,7 @@ export default ({ config }) => {
     ...config,
 
     // 2. Configuración Explícita (lo que tenías en app.json)
-    name: "iotProject",
+    name: "Mi Cultivo",
     slug: "iotProject",
     version: "1.0.0",
     orientation: "portrait",
@@ -29,7 +29,7 @@ export default ({ config }) => {
       package: "com.chensoxo.iotProject",
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff"
+        backgroundColor: "#E5E5E5"
       },
       edgeToEdgeEnabled: true
     },
@@ -45,10 +45,14 @@ export default ({ config }) => {
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "backgroundColor": "#E5E5E5",
+          "image": "./assets/images/splash-icon-light.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#151718"
+          }
         }
       ]
     ],

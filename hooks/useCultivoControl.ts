@@ -5,14 +5,14 @@ import { database } from '../utils/firebaseConfig';
 interface ControlState {
     bomba: boolean;
     valvula: boolean;
-    ph: boolean;
+    medir_ph: boolean;
 }
 
 export const useCultivoControl = () => {
     const [controlState, setControlState] = useState<ControlState>({
         bomba: false,
         valvula: false,
-        ph: false,
+        medir_ph: false,
     });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export const useCultivoControl = () => {
                 setControlState(snapshot.val() as ControlState);
                 setError(null);
             } else {
-                setControlState({ bomba: false, valvula: false, ph: false });
+                setControlState({ bomba: false, valvula: false, medir_ph: false });
             }
             setIsLoading(false);
         }, (dbError) => {
@@ -49,10 +49,10 @@ export const useCultivoControl = () => {
         }
     };
 
-    const togglePh = async () => {
-        const newState = !controlState.ph;
+    const toggleMedirPh = async () => {
+        const newState = !controlState.medir_ph;
         try {
-            await set(ref(database, 'cultivo/control/ph'), newState);
+            await set(ref(database, 'cultivo/control/medir_ph'), newState);
         } catch (e) {
             console.error("Error toggling ph:", e);
             setError("Failed to toggle ph.");
@@ -81,7 +81,7 @@ export const useCultivoControl = () => {
         error,
         toggleBomba,
         toggleValvula,
-        togglePh,
+        toggleMedirPh,
         refetch,
     };
 };

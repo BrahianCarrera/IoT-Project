@@ -12,14 +12,14 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
 import { useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const theme = useTheme();
-  const { controlState, isLoading, error  } = useCultivoControl();
+  const { controlState, isLoading, error } = useCultivoControl();
 
   const {
     metrics,
@@ -77,9 +77,8 @@ export default function Index() {
         style={{ backgroundColor: theme.colors.background }}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        
         <PlantHeader
-          isConnected={!errorMetrics} 
+          isConnected={!errorMetrics}
           lastUpdate={formatDate(metrics.timestamp)}
         />
 
@@ -90,17 +89,16 @@ export default function Index() {
         />
 
         <View style={styles.metricsGrid}>
-          
           <MetricCard
             title="Temperatura"
-            value={metrics.temperatura} 
+            value={metrics.temperatura}
             unit="°C"
             icon="thermometer"
             min={18}
             max={30}
             status={getMetricStatus(metrics.temperatura, 18, 30)}
-          />  
-          
+          />
+
           <MetricCard
             title="Humedad del Aire"
             value={metrics.humedad_aire}
@@ -121,7 +119,6 @@ export default function Index() {
             status={getMetricStatus(metrics.ph, 5.5, 7.0)}
           />
 
-          
           <MetricCard
             title="Humedad del Suelo"
             value={metrics.humedad_suelo}
@@ -134,11 +131,9 @@ export default function Index() {
         </View>
 
         <WaterLevelCard
-          waterLevel={metrics.nivel_agua} 
+          waterLevel={metrics.nivel_agua}
           status={getMetricStatus(metrics.nivel_agua, 20, 100)}
         />
-
-        
 
         <PlantFooter />
       </ScrollView>
@@ -147,7 +142,6 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  
   metricsGrid: {
     flexDirection: "column",
     flexWrap: "nowrap",

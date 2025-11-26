@@ -12,7 +12,7 @@ export const formatDate = (timestamp: string | number): string => {
         let date: Date;
 
         if (typeof timestamp === 'number') {
-            // Asume que el número es un timestamp en segundos
+
             date = new Date(timestamp * 1000);
         } else {
             // Intenta primero como un número (timestamp en segundos como string)
@@ -31,7 +31,8 @@ export const formatDate = (timestamp: string | number): string => {
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            second: '2-digit'
+            second: '2-digit',
+            timeZone: 'UTC'
         }
 
         return date.toLocaleString('es-ES', options);

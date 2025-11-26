@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ControlScreen() {
   const theme = useTheme();
-  const { controlState, isLoading, error, toggleBomba, toggleValvula, togglePh, refetch } = useCultivoControl();
+  const { controlState, isLoading, error, toggleBomba, toggleValvula, toggleMedirPh, refetch } = useCultivoControl();
 
   if (isLoading) {
     return (
@@ -127,8 +127,8 @@ export default function ControlScreen() {
                 Activa el sensor temporalmente para tomar una lectura precisa del pH actual.
               </Text>
               <Switch
-                value={controlState.ph}
-                onValueChange={togglePh}
+                value={controlState.medir_ph}
+                onValueChange={toggleMedirPh}
                 color={theme.colors.primary}
               />
             </View>
