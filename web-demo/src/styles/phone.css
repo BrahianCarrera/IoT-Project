@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Marco de teléfono (estilo iPhone) para presentar la app móvil
+   ========================================================================== */
+
+.phone-scaler {
+  position: relative;
+}
+
+.phone-frame {
+  position: relative;
+  width: 414px;
+  height: 868px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 58px;
+  background: linear-gradient(155deg, #3a3d42 0%, #0a0b0d 18%, #101214 55%, #2c2f33 100%);
+  box-shadow:
+    0 50px 90px -30px rgba(0, 0, 0, 0.85),
+    0 0 0 1.5px rgba(255, 255, 255, 0.12),
+    inset 0 0 3px rgba(255, 255, 255, 0.35),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.65);
+}
+
+/* Botones laterales */
+
+.phone-btn {
+  position: absolute;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #26292d, #101214);
+  box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.phone-btn--mute {
+  left: -3px;
+  top: 138px;
+  height: 30px;
+}
+
+.phone-btn--vol-up {
+  left: -3px;
+  top: 192px;
+  height: 62px;
+}
+
+.phone-btn--vol-down {
+  left: -3px;
+  top: 270px;
+  height: 62px;
+}
+
+.phone-btn--power {
+  right: -3px;
+  top: 226px;
+  height: 96px;
+}
+
+/* Pantalla */
+
+.phone-screen {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  border-radius: 46px;
+  overflow: hidden;
+  background: #fcfdf6;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+/* Barra de estado */
+
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 12px 28px 0;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.status-bar__time {
+  padding-left: 10px;
+}
+
+.status-bar__icons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Dynamic Island */
+
+.phone-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 36px;
+  border-radius: 20px;
+  background: #000;
+  z-index: 60;
+  pointer-events: none;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+/* Indicador inferior (home) */
+
+.phone-home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 5px;
+  border-radius: 3px;
+  opacity: 0.9;
+  z-index: 60;
+  pointer-events: none;
+}
